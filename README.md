@@ -1,6 +1,6 @@
 # This Telegram bot adds any sent photo or image sticker to your OWN STICKERPACK created BY THIS BOT.
 
-[![N|Solid](https://github.com/BobVolskiy/adding-photo-and-stickers-to-your-stickerpack/blob/main/logoheader2.png?raw=true)](https://twitter.com/bob_volskiy)
+[![N|Solid](https://github.com/BobVolskiy/adding-to-your-stickerpack/blob/main/logoheader2.png?raw=true)](https://twitter.com/bob_volskiy)
 
 
 # Requirements: 

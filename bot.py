@@ -6,7 +6,7 @@ bot = telebot.TeleBot(token)
 
 @bot.message_handler(commands=["start"])
 def help(message):
-    bot.send_message(message.chat.id,'Этот бот добавляет любое отправленное фото или стикер в стикерпак\nПользоваться ботом невозможно, если вы не Боб\n\n'+str(stickerlink)+'\n\nБота создал @bob_volskiy\nИсходный код на Github: github.com/BobVolskiy/adding-photo-and-stickers-to-your-stickerpack')
+    bot.send_message(message.chat.id,'Этот бот добавляет любое отправленное фото или стикер в стикерпак\nПользоваться ботом невозможно, если вы не Боб\n\n'+str(stickerlink)+'\n\nБота создал @bob_volskiy\nИсходный код на Github: github.com/BobVolskiy/adding-to-your-stickerpack')
 
 def resizing(im):
     width, height = im.size
