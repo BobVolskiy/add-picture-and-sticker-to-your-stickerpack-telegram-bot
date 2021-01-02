@@ -1,3 +1,4 @@
+#!/usr/bin/python3.8
 import telebot
 from PIL import Image
 import os
