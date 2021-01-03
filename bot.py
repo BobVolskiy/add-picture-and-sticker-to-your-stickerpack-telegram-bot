@@ -7,10 +7,10 @@ bot = telebot.TeleBot(token)
 
 @bot.message_handler(commands=["start"])
 def start(message):
-    bot.send_message(message.chat.id,'✌ Отправь мне фото или стикер, чтобы начать...')
+    bot.send_message(message.chat.id,'✌ Отправь мне картинку или стикер, чтобы начать...\n❗Если картинка прозрачная, отправляйте в виде файла')
 @bot.message_handler(commands=["help"])
 def help(message):
-    bot.send_message(message.chat.id,'🤖 Этот бот добавляет любое отправленное фото или стикер в стикерпак Боба\nПользоваться ботом невозможно, если вы не Боб\n\n'+str(stickerlink)+'\n\n👨‍💻Бота создал @bob_volskiy\ngithub.com/BobVolskiy/adding-to-your-stickerpack')
+    bot.send_message(message.chat.id,'🤖 Этот бот добавляет любое отправленное фото или стикер в стикерпак Боба\n\n'+str(stickerlink)+'\n\n👨‍💻Бота создал @bob_volskiy\nCсылка на гитхаб: github.com/BobVolskiy/adding-to-your-stickerpack')
 
 def resizing(im):
     width, height = im.size
@@ -41,19 +41,45 @@ def converting(fileID,CHATID):
 @bot.message_handler(content_types=["photo"])
 def photo(message):
     bot.send_message(message.chat.id,'🔁 Принял фотку. Конвертирую и добавляю...')
-    if message.chat.id==owner:
+    fileID = message.photo[-1].file_id
+    if message.chat.id==owner+1:
         fileID = message.photo[-1].file_id
         converting(fileID,message.chat.id)
     else: 
-        bot.send_message(message.chat.id,'Стоп, ты не Боб 😆')
+        bot.send_message(message.chat.id,'Стоп, ты не Боб 😆\nНо я вышлю ему эту картинку')
+        bot.send_photo(owner, bot.download_file(bot.get_file(fileID).file_path),caption='Эту картинку прислал @'+str(message.from_user.username))
 
 @bot.message_handler(content_types=["sticker"])
 def sticker(message):
     bot.send_message(message.chat.id,'🔁 Принял стикер. Конвертирую и добавляю...')
+    fileID = message.sticker.file_id
     if message.chat.id==owner:
-        fileID = message.sticker.file_id
         converting(fileID,message.chat.id)
     else: 
-        bot.send_message(message.chat.id,'Стоп, ты не Боб 😆')
+        bot.send_message(message.chat.id,'Стоп, ты не Боб 😆\nНо я вышлю ему этот стикер')
+        bot.send_sticker(owner, bot.download_file(bot.get_file(fileID).file_path))
+        bot.send_message(owner, 'Этот стикер прислал @'+str(message.from_user.username))
+
+@bot.message_handler(content_types=["document"])
+def document(message):
+    if message.document.file_name.split('.')[-1]=='png' or message.document.file_name.split('.')[-1]=='jpg':
+        if message.document.file_size<25000000:
+            bot.send_message(message.chat.id,'🔁 Принял файл. Конвертирую и добавляю...')
+            fileID = message.document.file_id
+            if message.chat.id==owner:
+                converting(fileID,message.chat.id)
+            else: 
+                bot.send_message(message.chat.id,'Стоп, ты не Боб 😆\nНо я вышлю ему эту картинку')
+                file_info = bot.get_file(fileID)
+                downloaded_file = bot.download_file(file_info.file_path)
+                with open(message.document.file_name, 'wb') as new_file:
+                    new_file.write(downloaded_file)
+                im = open(message.document.file_name,'r+b')
+                bot.send_document(owner, im,caption='Эту картинку прислал @'+str(message.from_user.username))
+                im.close()
+                os.remove(message.document.file_name)
+        else: bot.send_message(message.chat.id,'❌ Размер файла превышает 25 МБ')
+    else: bot.send_message(message.chat.id,'❌ Поддерживаются форматы *.jpg и *.png')
+
 print('Бот начал свою работу...')
 bot.polling()
