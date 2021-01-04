@@ -44,7 +44,7 @@ def converting(fileID,CHATID):
 def photo(message):
     bot.send_message(message.chat.id,'🔁 Принял фотку. Конвертирую и добавляю...')
     fileID = message.photo[-1].file_id
-    if message.chat.id==owner+1:
+    if message.chat.id==owner:
         fileID = message.photo[-1].file_id
         converting(fileID,message.chat.id)
     else: 
