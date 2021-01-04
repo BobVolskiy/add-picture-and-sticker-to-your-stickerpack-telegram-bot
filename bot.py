@@ -7,11 +7,11 @@ bot = telebot.TeleBot(token)
 
 @bot.message_handler(commands=["start"])
 def start(message):
-    bot.send_message(message.chat.id,'✌ Отправь мне картинку или стикер, чтобы начать...\n❗Если картинка прозрачная, отправляйте в виде файла')
+    bot.send_message(message.chat.id,'Отправь мне картинку или стикер, чтобы начать...\n❗Если картинка прозрачная, отправляйте в виде файла')
     bot.send_message(owner,'@'+str(message.from_user.username)+' кинул старт')
 @bot.message_handler(commands=["help"])
 def help(message):
-    bot.send_message(message.chat.id,'🤖 Этот бот добавляет любое отправленное фото или стикер в стикерпак Боба\n\n'+str(stickerlink)+'\n\n👨‍💻Бота создал @bob_volskiy\nCсылка на гитхаб: github.com/BobVolskiy/adding-to-your-stickerpack')
+    bot.send_message(message.chat.id,'Этот бот добавляет любое отправленное фото или стикер в стикерпак Боба '+str(stickerlink)+'\n\nБота создал @bob_volskiy\nИсходный код: github.com/BobVolskiy/\n\nМои боты:\n@bvsticker_bot\n@bob_musica_bot')
     bot.send_message(owner,'@'+str(message.from_user.username)+' кинул хелп')
 
 def resizing(im):
