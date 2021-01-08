@@ -10,6 +10,10 @@
   - Download latest release and create `config.py` in folder with `bot.py`. `config.py` example down below
   - Run `bot.py`. If ok, it will print `Бот начал свою работу...`
 
+# User guide: 
+  - Sticker pack must be created by bot. Create it using xxxx command
+  - Send sticker, photo or png file and bot will add it to your stickerpack really faster than usual "Stickers" bot. You also dont need to convert your images by yourself to follow 512px width image rule. Bot will do it :D
+
 # Working example: 
 <img src="images/preview_1.jpg">
 <img src="images/preview_2.jpg">
