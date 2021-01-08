@@ -3,6 +3,9 @@ import telebot
 from PIL import Image
 import os
 from config import * #create config.py file next to this one. config.py example copy from https://github.com/BobVolskiy/adding-to-your-stickerpack/blob/main/README.md
+
+
+
 bot = telebot.TeleBot(token)
 
 @bot.message_handler(commands=["start"])
@@ -34,7 +37,7 @@ def converting(fileID,CHATID):
         b = bytearray(f)
     try:
         bot.add_sticker_to_set(owner,'bv_by_bvsticker_bot',b,'😘')
-        bot.send_message(CHATID,'✅ Добавил в стикерпак изображение выше \n'+stickerlink)
+        bot.send_message(CHATID,'Добавлено!\n'+stickerlink)
     except:
         bot.send_message(CHATID,'😫 Что-то пошло не так...')
     os.remove("resized.png")
@@ -42,21 +45,22 @@ def converting(fileID,CHATID):
 
 @bot.message_handler(content_types=["photo"])
 def photo(message):
-    bot.send_message(message.chat.id,'🔁 Принял фотку. Конвертирую и добавляю...')
+    bot.send_message(message.chat.id,'Принял фотку. Конвертирую и добавляю...')
     fileID = message.photo[-1].file_id
     if message.chat.id==owner:
-        fileID = message.photo[-1].file_id
         converting(fileID,message.chat.id)
+        bot.delete_message(message.chat.id,message.message_id+1)
     else: 
         bot.send_message(message.chat.id,'Стоп, ты не Боб 😆\nНо я вышлю ему эту картинку')
         bot.send_photo(owner, bot.download_file(bot.get_file(fileID).file_path),caption='Эту картинку прислал @'+str(message.from_user.username))
 
 @bot.message_handler(content_types=["sticker"])
 def sticker(message):
-    bot.send_message(message.chat.id,'🔁 Принял стикер. Конвертирую и добавляю...')
+    bot.send_message(message.chat.id,'Принял стикер. Конвертирую и добавляю...')
     fileID = message.sticker.file_id
     if message.chat.id==owner:
         converting(fileID,message.chat.id)
+        bot.delete_message(message.chat.id,message.message_id+1)
     else: 
         bot.send_message(message.chat.id,'Стоп, ты не Боб 😆\nНо я вышлю ему этот стикер')
         bot.send_sticker(owner, bot.download_file(bot.get_file(fileID).file_path))
@@ -66,10 +70,11 @@ def sticker(message):
 def document(message):
     if message.document.file_name.split('.')[-1]=='png' or message.document.file_name.split('.')[-1]=='jpg':
         if message.document.file_size<25000000:
-            bot.send_message(message.chat.id,'🔁 Принял файл. Конвертирую и добавляю...')
+            bot.send_message(message.chat.id,'Принял файл. Конвертирую и добавляю...')
             fileID = message.document.file_id
             if message.chat.id==owner:
                 converting(fileID,message.chat.id)
+                bot.delete_message(message.chat.id,message.message_id+1)
             else: 
                 bot.send_message(message.chat.id,'Стоп, ты не Боб 😆\nНо я вышлю ему эту картинку')
                 file_info = bot.get_file(fileID)
