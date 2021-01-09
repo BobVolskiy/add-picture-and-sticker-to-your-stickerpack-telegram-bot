@@ -1,5 +1,4 @@
 # This Telegram bot adds any sent photo or image sticker to your OWN STICKERPACK created BY THIS BOT.
- - It temporary cant create stickerpack!
 
 [![N|Solid](images/logo.png)](https://twitter.com/bob_volskiy)
 
@@ -11,7 +10,7 @@
   - Run `bot.py`. If ok, it will print `Бот начал свою работу...`
 
 # User guide: 
-  - Sticker pack must be created by bot. Create it using xxxx command
+  - Sticker pack must be created by bot. Create it using /css command
   - Send sticker, photo or png file and bot will add it to your stickerpack really faster than usual "Stickers" bot. You also dont need to convert your images by yourself to follow 512px width image rule. Bot will do it :D
 
 # Working example: 
