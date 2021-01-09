@@ -55,7 +55,16 @@ def create_sticker_set(message):
         bot.send_message(message.chat.id,'Введите название стикерпака...')
         text_toggler='Ввести тайтл'
     else: bot.send_message(message.chat.id,'Стикерпак уже создан\nt.me/addstickers/'+stickers_link)
-        
+
+@bot.message_handler(commands=["start"])
+def start(message):
+    bot.send_message(message.chat.id,'Отправь мне картинку или стикер, чтобы начать...')
+    bot.send_message(owner_id,'@'+str(message.from_user.username)+' /start')
+@bot.message_handler(commands=["help"])
+def help(message):
+    bot.send_message(message.chat.id,'Этот бот добавляет любое отправленное фото или стикер в ваш стикерпак'+str(stickers_link)+'\n\nБота создал @bob_volskiy\nВерсия 1.2\nИсходный код: github.com/BobVolskiy/\n\nМои боты:\n@BVSticker_bot\n@BVMusic_bot')
+    bot.send_message(owner_id,'@'+str(message.from_user.username)+' /help')
+       
     
 @bot.message_handler(content_types=["text"])
 def main(message):
@@ -73,14 +82,6 @@ def main(message):
         bot.send_message(message.chat.id,'Вышлите картинку для вашего первого стикера...')
 
 
-@bot.message_handler(commands=["start"])
-def start(message):
-    bot.send_message(message.chat.id,'Отправь мне картинку или стикер, чтобы начать...')
-    bot.send_message(owner_id,'@'+str(message.from_user.username)+' кинул старт')
-@bot.message_handler(commands=["help"])
-def help(message):
-    bot.send_message(message.chat.id,'Этот бот добавляет любое отправленное фото или стикер в ваш стикерпак'+str(stickers_link)+'\n\nБота создал @bob_volskiy\nВерсия 1.2\nИсходный код: github.com/BobVolskiy/\n\nМои боты:\n@BVSticker_bot\n@BVMusic_bot')
-    bot.send_message(owner_id,'@'+str(message.from_user.username)+' кинул хелп')
 
 def resizing(im):
     width, height = im.size
