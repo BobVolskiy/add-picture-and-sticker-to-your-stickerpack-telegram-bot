@@ -68,8 +68,49 @@ def donate(message):
     markup.add(types.InlineKeyboardButton(text='Исходный код', url='https://github.com/BobVolskiy/add-picture-and-sticker-to-your-stickerpack-telegram-bot'), types.InlineKeyboardButton(text='Донат', url='https://patreon.com/bob_volskiy/'))
     bot.send_message(message.chat.id,'<b>Бота создал:</b> <i>@bob_volskiy</i>\n'+'<b>Версия:</b> <i>1.3</i>\n'+'<b>Мои боты:</b><i>\n@BVSticker_bot\n@BVMusic_bot</i>\n\n', parse_mode="HTML",reply_markup = markup)
     bot.send_message(owner_id,'@'+str(message.from_user.username)+' /donate')
-       
-    
+
+
+
+def revokestickerset():
+    global capibaras
+    stickers=bot.get_sticker_set('bv_by_bvsticker_bot').stickers
+    capibaras=[]
+    for i in range(len(stickers))
+            capibara1 = types.InlineQueryResultCachedSticker(
+                id=i,
+                sticker_file_id=stickers[i].file_id,
+            )
+            capibaras.append(capibara1)
+revokestickerset() 
+@bot.callback_query_handler(lambda query: query.data == "cancel")
+def process_callback_1(query):
+    global text_toggler
+    global capibaras
+    capibaras=[]
+    text_toggler=None
+    bot.edit_message_text(chat_id=query.from_user.id, message_id=query.message.message_id, text='Отменено', reply_markup=None)
+
+@bot.inline_handler(func=lambda query: True)
+def inline_mode(query):
+    global capibaras
+    bot.answer_inline_query(query.id, capibaras) 
+@bot.message_handler(commands=["delsticker"])
+def delcommand(message):
+    if message.chat.id==owner_id:
+        global text_toggler
+        revokestickerset()
+        text_toggler='Удалить стикер'
+        markup = types.InlineKeyboardMarkup()
+        markup.row_width = 2
+        markup.add(types.InlineKeyboardButton(text='Отменить', callback_data="cancel"),types.InlineKeyboardButton(text='Выбрать', switch_inline_query_current_chat=""))
+        bot.send_message(message.chat.id,'Выберите стикер, который хотите удалить...',reply_markup = markup)
+    else: 
+        bot.send_message(message.chat.id,'Ты не владелец стикерпака',reply_markup = markup)
+
+
+##### ALL COMMANDS ABOVE THIS LINE #####   
+
+
 @bot.message_handler(content_types=["text"])
 def main(message):
     print('- CHAT: @'+message.from_user.username+': '+message.text)
@@ -84,8 +125,6 @@ def main(message):
         stickers_link=message.text+'_by_'+bot_username
         text_toggler='Выслать фото'
         bot.send_message(message.chat.id,'Вышлите картинку для вашего первого стикера...')
-
-
 
 def resizing(im):
     width, height = im.size
@@ -110,9 +149,11 @@ def converting(file_id,chat_id):
     return b
 
 @bot.message_handler(content_types=["photo","sticker","document"])
-def startq(message):
+def handler(message):
     chat_id=message.chat.id
     ms_type=message.content_type
+    global text_toggler
+
     print('- BOT: @'+message.from_user.username+' sent a '+ms_type)
     if ms_type=="photo":
         file_id = message.photo[-1].file_id
@@ -120,8 +161,18 @@ def startq(message):
         file_id = message.sticker.file_id
     elif ms_type=="document":
         file_id = message.document.file_id
-    global text_toggler
-    if text_toggler=='Выслать фото':
+    
+    if text_toggler=='Удалить стикер':
+        global capibaras
+        capibaras=[]
+        print(message.sticker.file_id)
+        bot.delete_sticker_from_set(message.sticker.file_id)
+        print('done')
+        text_toggler=None
+        revokestickerset()
+        bot.send_message(chat_id,'Удалено')
+
+    elif text_toggler=='Выслать фото':
         global create_new_sticker_set_title
         global stickers_link
         try:
@@ -144,6 +195,7 @@ def startq(message):
                 markup = types.InlineKeyboardMarkup()
                 markup.add(types.InlineKeyboardButton(text='Стикерпак', url='https://t.me/addstickers/'+stickers_link))
                 bot.add_sticker_to_set(owner_id,stickers_link,converting(file_id,chat_id),'😘')
+                revokestickerset()
                 bot.send_message(chat_id,'Добавлено!',reply_markup = markup)
             except:
                 bot.send_message(chat_id,'😫 Что-то пошло не так...')
