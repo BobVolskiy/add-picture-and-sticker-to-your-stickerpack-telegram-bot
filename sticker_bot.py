@@ -85,8 +85,6 @@ revokestickerset()
 @bot.callback_query_handler(lambda query: query.data == "cancel")
 def process_callback_1(query):
     global text_toggler
-    global capibaras
-    capibaras=[]
     text_toggler=None
     bot.edit_message_text(chat_id=query.from_user.id, message_id=query.message.message_id, text='Отменено', reply_markup=None)
 
@@ -96,16 +94,20 @@ def inline_mode(query):
     bot.answer_inline_query(query.id, capibaras) 
 @bot.message_handler(commands=["delsticker"])
 def delcommand(message):
-    if message.chat.id==owner_id:
-        global text_toggler
-        revokestickerset()
-        text_toggler='Удалить стикер'
-        markup = types.InlineKeyboardMarkup()
-        markup.row_width = 2
-        markup.add(types.InlineKeyboardButton(text='Отменить', callback_data="cancel"),types.InlineKeyboardButton(text='Выбрать', switch_inline_query_current_chat=""))
-        bot.send_message(message.chat.id,'Выберите стикер, который хотите удалить...',reply_markup = markup)
-    else: 
-        bot.send_message(message.chat.id,'Ты не владелец стикерпака',reply_markup = markup)
+    global text_toggler
+    global sent_id
+    if text_toggler!='Удалить стикер':
+        if message.chat.id==owner_id:
+            revokestickerset()
+            text_toggler='Удалить стикер'
+            markup = types.InlineKeyboardMarkup()
+            markup.row_width = 2
+            markup.add(types.InlineKeyboardButton(text='Отменить', callback_data="cancel"),types.InlineKeyboardButton(text='Выбрать', switch_inline_query_current_chat=""))
+            sent_id=bot.send_message(message.chat.id,'Выберите стикер, который хотите удалить...',reply_markup = markup).message_id
+        else: 
+            bot.send_message(message.chat.id,'Ты не владелец стикерпака',reply_markup = markup)
+    else:
+        bot.delete_message(message.chat.id, message.message_id)
 
 
 ##### ALL COMMANDS ABOVE THIS LINE #####   
@@ -163,14 +165,17 @@ def handler(message):
         file_id = message.document.file_id
     
     if text_toggler=='Удалить стикер':
-        global capibaras
-        capibaras=[]
-        print(message.sticker.file_id)
-        bot.delete_sticker_from_set(message.sticker.file_id)
-        print('done')
+        global sent_id
+        bot.edit_message_text(chat_id=chat_id, message_id=sent_id, text='Стикер выбран', reply_markup=None)
+        try:
+            bot.delete_sticker_from_set(message.sticker.file_id)
+            print('- BOT: Sticker deleted')
+            bot.send_message(chat_id,'Удалено')
+        except:
+            bot.send_message(chat_id,'Судя по всему стикер уже удалён или не принадлежит моему стикерпаку')
         text_toggler=None
         revokestickerset()
-        bot.send_message(chat_id,'Удалено')
+        
 
     elif text_toggler=='Выслать фото':
         global create_new_sticker_set_title
