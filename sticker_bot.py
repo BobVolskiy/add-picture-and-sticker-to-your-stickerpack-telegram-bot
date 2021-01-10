@@ -71,16 +71,19 @@ def donate(message):
 
 
 
+
+
 def revokestickerset():
     global capibaras
+    print('SET REVOKED')
     stickers=bot.get_sticker_set('bv_by_bvsticker_bot').stickers
     capibaras=[]
-    for i in range(len(stickers)):
-            capibara1 = types.InlineQueryResultCachedSticker(
-                id=i,
-                sticker_file_id=stickers[i].file_id,
-            )
-            capibaras.append(capibara1)
+    for i in range(len(stickers)-1,-1,-1):
+        capibara1 = types.InlineQueryResultCachedSticker(
+            id=i,
+            sticker_file_id=stickers[i].file_id,
+        )
+        capibaras.append(capibara1)
 revokestickerset() 
 @bot.callback_query_handler(lambda query: query.data == "cancel")
 def process_callback_1(query):
