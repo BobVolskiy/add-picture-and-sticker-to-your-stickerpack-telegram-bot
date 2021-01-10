@@ -18,7 +18,7 @@ It can be used for general chat, where anyone can drop a picture, and the owner 
   - In the terminal enter the command `pip install pyTelegramBotAPI`
   - Create bot here https://t.me/BotFather and copy it's Token
   - Download latest release
-  - Run `sticker_bot.py`. If ok, it will print `BOT: Started...`
+  - Run `sticker_bot.py`. It will ask you to write bot token. Restart bot and if ok, it will print `BOT: Started...`
 
 # User guide: 
   - Sticker pack must be created by bot. Create it using `/css` command
