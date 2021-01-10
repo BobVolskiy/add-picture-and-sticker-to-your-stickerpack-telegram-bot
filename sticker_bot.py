@@ -75,7 +75,7 @@ def revokestickerset():
     global capibaras
     stickers=bot.get_sticker_set('bv_by_bvsticker_bot').stickers
     capibaras=[]
-    for i in range(len(stickers))
+    for i in range(len(stickers)):
             capibara1 = types.InlineQueryResultCachedSticker(
                 id=i,
                 sticker_file_id=stickers[i].file_id,
