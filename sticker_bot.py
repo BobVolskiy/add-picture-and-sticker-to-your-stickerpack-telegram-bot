@@ -66,11 +66,8 @@ def donate(message):
     markup = types.InlineKeyboardMarkup()
     markup.row_width = 2
     markup.add(types.InlineKeyboardButton(text='Исходный код', url='https://github.com/BobVolskiy/add-picture-and-sticker-to-your-stickerpack-telegram-bot'), types.InlineKeyboardButton(text='Донат', url='https://patreon.com/bob_volskiy/'))
-    bot.send_message(message.chat.id,'<b>Бота создал:</b> <i>@bob_volskiy</i>\n'+'<b>Версия:</b> <i>1.3</i>\n'+'<b>Мои боты:</b><i>\n@BVSticker_bot\n@BVMusic_bot</i>\n\n', parse_mode="HTML",reply_markup = markup)
+    bot.send_message(message.chat.id,'<b>Бота создал:</b> <i>@bob_volskiy</i>\n'+'<b>Версия:</b> <i>1.4</i>\n'+'<b>Мои боты:</b><i>\n@BVSticker_bot\n@BVMusic_bot</i>\n\n', parse_mode="HTML",reply_markup = markup)
     bot.send_message(owner_id,'@'+str(message.from_user.username)+' /donate')
-
-
-
 
 
 def revokestickerset():
@@ -158,11 +155,12 @@ def handler(message):
     chat_id=message.chat.id
     ms_type=message.content_type
     global text_toggler
-
+    emoji='😘'
     print('- BOT: @'+message.from_user.username+' sent a '+ms_type)
     if ms_type=="photo":
         file_id = message.photo[-1].file_id
     elif ms_type=="sticker":
+        emoji=message.sticker.emoji
         file_id = message.sticker.file_id
     elif ms_type=="document":
         file_id = message.document.file_id
@@ -202,7 +200,7 @@ def handler(message):
             try:
                 markup = types.InlineKeyboardMarkup()
                 markup.add(types.InlineKeyboardButton(text='Стикерпак', url='https://t.me/addstickers/'+stickers_link))
-                bot.add_sticker_to_set(owner_id,stickers_link,converting(file_id,chat_id),'😘')
+                bot.add_sticker_to_set(owner_id,stickers_link,converting(file_id,chat_id),emoji)
                 revokestickerset()
                 bot.send_message(chat_id,'Добавлено!',reply_markup = markup)
             except:
